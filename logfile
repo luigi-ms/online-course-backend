@@ -1,0 +1,65 @@
+2021-12-12 14:50:53.974 -03 [14454] LOG:  starting PostgreSQL 14.1 on arm-unknown-linux-androideabi, compiled by Android (7714059, based on r416183c1) clang version 12.0.8 (https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee), 32-bit
+2021-12-12 14:50:53.976 -03 [14454] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2021-12-12 14:50:53.986 -03 [14454] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2021-12-12 14:50:54.010 -03 [14460] LOG:  database system was shut down at 2021-12-12 02:09:51 -03
+2021-12-12 14:50:54.034 -03 [14454] LOG:  database system is ready to accept connections
+2021-12-12 14:51:12.019 -03 [14528] FATAL:  database "online-course-sysyem" does not exist
+2021-12-12 16:13:01.368 -03 [14464] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2021-12-12 16:13:25.255 -03 [25620] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2021-12-12 16:13:32.044 -03 [14464] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2021-12-12 16:18:21.141 -03 [25634] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2021-12-12 16:18:32.970 -03 [14464] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2021-12-12 16:22:03.382 -03 [14464] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2021-12-12 16:22:03.393 -03 [25662] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2021-12-12 16:26:12.912 -03 [14464] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2021-12-12 18:59:26.553 -03 [30269] LOG:  starting PostgreSQL 14.1 on arm-unknown-linux-androideabi, compiled by Android (7714059, based on r416183c1) clang version 12.0.8 (https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee), 32-bit
+2021-12-12 18:59:26.556 -03 [30269] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2021-12-12 18:59:26.562 -03 [30269] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2021-12-12 18:59:26.587 -03 [30275] LOG:  database system was interrupted; last known up at 2021-12-12 14:55:54 -03
+2021-12-12 18:59:26.862 -03 [30275] LOG:  database system was not properly shut down; automatic recovery in progress
+2021-12-12 18:59:26.889 -03 [30275] LOG:  redo starts at 0/1749148
+2021-12-12 18:59:26.889 -03 [30275] LOG:  invalid record length at 0/1749230: wanted 24, got 0
+2021-12-12 18:59:26.889 -03 [30275] LOG:  redo done at 0/17491F8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2021-12-12 18:59:26.933 -03 [30269] LOG:  database system is ready to accept connections
+2021-12-12 20:03:31.754 -03 [30285] ERROR:  type "serial" does not exist
+2021-12-12 20:03:31.754 -03 [30285] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN idInstructor SET DATA TYPE SERIAL;
+2021-12-12 20:05:17.796 -03 [30285] ERROR:  type "serial" does not exist
+2021-12-12 20:05:17.796 -03 [30285] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN idInstructor SET DATA TYPE SERIAL;
+2021-12-12 20:17:06.706 -03 [30285] ERROR:  zero-length delimited identifier at or near """" at character 57
+2021-12-12 20:17:06.706 -03 [30285] STATEMENT:  ALTER TABLE Course ALTER COLUMN description SET DEFAULT "";
+2021-12-12 20:18:01.240 -03 [30285] ERROR:  syntax error at or near "[" at character 61
+2021-12-12 20:18:01.240 -03 [30285] STATEMENT:  ALTER TABLE Student ALTER COLUMN currentCourses SET DEFAULT [];
+2021-12-12 20:23:14.767 -03 [30285] ERROR:  syntax error at or near "{" at character 62
+2021-12-12 20:23:14.767 -03 [30285] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN ownedCourses SET DEFAULT {};
+2021-12-12 20:23:25.731 -03 [30285] ERROR:  malformed array literal: "[]"
+2021-12-12 20:23:25.731 -03 [30285] DETAIL:  "[" must introduce explicitly-specified array dimensions.
+2021-12-12 20:23:25.731 -03 [30285] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN ownedCourses SET DEFAULT '[]';
+2021-12-12 20:23:52.821 -03 [30285] ERROR:  syntax error at or near "[" at character 62
+2021-12-12 20:23:52.821 -03 [30285] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN ownedCourses SET DEFAULT [0];
+2021-12-12 20:24:03.374 -03 [30285] ERROR:  cannot determine type of empty array
+2021-12-12 20:24:03.374 -03 [30285] HINT:  Explicitly cast to the desired type, for example ARRAY[]::integer[].
+2021-12-12 20:24:03.374 -03 [30285] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN ownedCourses SET DEFAULT ARRAY [];
+2021-12-12 20:24:38.124 -03 [30285] ERROR:  cannot determine type of empty array
+2021-12-12 20:24:38.124 -03 [30285] HINT:  Explicitly cast to the desired type, for example ARRAY[]::integer[].
+2021-12-12 20:24:38.124 -03 [30285] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN ownedCourses SET DEFAULT ARRAY[]::smallint;
+2021-12-12 20:24:46.003 -03 [30285] ERROR:  cannot determine type of empty array
+2021-12-12 20:24:46.003 -03 [30285] HINT:  Explicitly cast to the desired type, for example ARRAY[]::integer[].
+2021-12-12 20:24:46.003 -03 [30285] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN ownedCourses SET DEFAULT ARRAY[]::integer;
+2021-12-12 22:18:19.219 -03 [27351] ERROR:  value too long for type character varying(8)
+2021-12-12 22:18:19.219 -03 [27351] STATEMENT:  INSERT INTO Instructor(name, biography, password) VALUES($1, $2, $3)
+2021-12-12 23:03:21.114 -03 [30269] LOG:  received fast shutdown request
+2021-12-12 23:03:21.122 -03 [30269] LOG:  aborting any active transactions
+2021-12-12 23:03:21.125 -03 [30269] LOG:  background worker "logical replication launcher" (PID 30281) exited with exit code 1
+2021-12-12 23:03:21.127 -03 [30276] LOG:  shutting down
+2021-12-12 23:03:21.190 -03 [30269] LOG:  database system is shut down
+2021-12-13 19:35:26.900 -03 [22098] LOG:  starting PostgreSQL 14.1 on arm-unknown-linux-androideabi, compiled by Android (7714059, based on r416183c1) clang version 12.0.8 (https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee), 32-bit
+2021-12-13 19:35:26.904 -03 [22098] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2021-12-13 19:35:26.913 -03 [22098] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2021-12-13 19:35:26.928 -03 [22104] LOG:  database system was shut down at 2021-12-13 19:35:18 -03
+2021-12-13 19:35:26.938 -03 [22098] LOG:  database system is ready to accept connections
+2021-12-13 19:37:47.465 -03 [22121] ERROR:  syntax error at or near "Array" at character 64
+2021-12-13 19:37:47.465 -03 [22121] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN ownedCourses SET DATA TYPE Array[]::varchar;
+2021-12-13 19:37:57.348 -03 [22121] ERROR:  syntax error at or near "ARRAY" at character 64
+2021-12-13 19:37:57.348 -03 [22121] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN ownedCourses SET DATA TYPE ARRAY[]::varchar;
+2021-12-13 20:18:53.181 -03 [22121] ERROR:  syntax error at or near "*" at character 15
+2021-12-13 20:18:53.181 -03 [22121] STATEMENT:  select * from *;
