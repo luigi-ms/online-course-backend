@@ -40,7 +40,7 @@ class InstructorRepository extends Instructor{
     try{
       const result = await db.query("SELECT ownedCourses FROM Instructor WHERE idInstructor=$1",
       [this.id]);
-      return result.rows[0];
+      return result.rows[0].ownedcourses;
     }catch(err){
       return err.stack;
     }
@@ -49,24 +49,38 @@ class InstructorRepository extends Instructor{
   async updateColumn(column, newValue){
     let query = "";
 
+    const id = await this.selectIDAndPass();
+
+    if(!id){
+      return "404";
+    }
+
     if(column === "name"){
       query = "UPDATE Instructor SET name=$1 WHERE idInstructor=$2";
     }else if(column === "bio"){
       query = "UPDATE Instructor SET biography=$1 WHERE idInstructor=$2";
     }else if(column === "password"){
       query = "UPDATE Instructor SET password=$1 WHERE idInstructor=$2";
+    }else{
+      return "Column does not exist or you are not allowed to modify it";
     }
 
     try{
       const result = await db.query(query, [newValue, this.id]);
-      return res.rows[0];
+      return result.rows[0];
     }catch(err){
       return err.stack;
     }
   }
 
-  async updateOwnedCourses(changeOnlyEnd, newValue){
+  async updateCoursesArray(changeOnlyEnd, newValue){
     let query = "";
+
+    const id = await this.selectIDAndPass();
+
+    if(!id){
+      return "404";
+    }
 
     if(changeOnlyEnd){
       query = "UPDATE Instructor SET ownedCourses=array_append(ownedCourses, $1) WHERE idInstructor=$2";
@@ -83,6 +97,12 @@ class InstructorRepository extends Instructor{
   }
 
   async deleteInstructor(){
+    const id = await this.selectIDAndPass();
+
+    if(!id){
+      return "404";
+    }
+
     try{
       const result = await db.query("DELETE FROM Instructor WHERE idInstructor=$1",
       [this.id]);

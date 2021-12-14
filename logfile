@@ -63,3 +63,26 @@
 2021-12-13 19:37:57.348 -03 [22121] STATEMENT:  ALTER TABLE Instructor ALTER COLUMN ownedCourses SET DATA TYPE ARRAY[]::varchar;
 2021-12-13 20:18:53.181 -03 [22121] ERROR:  syntax error at or near "*" at character 15
 2021-12-13 20:18:53.181 -03 [22121] STATEMENT:  select * from *;
+2021-12-13 20:42:57.289 -03 [22098] LOG:  received fast shutdown request
+2021-12-13 20:42:57.292 -03 [22098] LOG:  aborting any active transactions
+2021-12-13 20:42:57.295 -03 [22098] LOG:  background worker "logical replication launcher" (PID 22110) exited with exit code 1
+2021-12-13 20:42:57.303 -03 [22105] LOG:  shutting down
+2021-12-13 20:42:57.347 -03 [22098] LOG:  database system is shut down
+2021-12-14 13:51:18.740 -03 [12234] LOG:  starting PostgreSQL 14.1 on arm-unknown-linux-androideabi, compiled by Android (7714059, based on r416183c1) clang version 12.0.8 (https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee), 32-bit
+2021-12-14 13:51:18.744 -03 [12234] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2021-12-14 13:51:18.754 -03 [12234] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2021-12-14 13:51:18.778 -03 [12244] LOG:  database system was shut down at 2021-12-13 20:42:57 -03
+2021-12-14 13:51:18.798 -03 [12234] LOG:  database system is ready to accept connections
+2021-12-14 14:28:57.627 -03 [16652] ERROR:  value too long for type character varying(8)
+2021-12-14 14:28:57.627 -03 [16652] STATEMENT:  UPDATE Student SET password=$1 WHERE idStudent=$2
+2021-12-14 14:52:44.355 -03 [17557] ERROR:  null value in column "instructorname" of relation "course" violates not-null constraint
+2021-12-14 14:52:44.355 -03 [17557] DETAIL:  Failing row contains (Impressionismo, etc etc etc, null, 1).
+2021-12-14 14:52:44.355 -03 [17557] STATEMENT:  INSERT INTO Course(title, description, instructorName) VALUES($1, $2, $3)
+2021-12-14 14:54:08.631 -03 [17590] ERROR:  null value in column "instructorname" of relation "course" violates not-null constraint
+2021-12-14 14:54:08.631 -03 [17590] DETAIL:  Failing row contains (Impressionismo, etc etc etc, null, 2).
+2021-12-14 14:54:08.631 -03 [17590] STATEMENT:  INSERT INTO Course(title, description, instructorName) VALUES($1, $2, $3)
+2021-12-14 14:55:00.895 -03 [17619] ERROR:  null value in column "instructorname" of relation "course" violates not-null constraint
+2021-12-14 14:55:00.895 -03 [17619] DETAIL:  Failing row contains (Impressionismo, etc etc etc, null, 3).
+2021-12-14 14:55:00.895 -03 [17619] STATEMENT:  INSERT INTO Course(title, description, instructorName) VALUES($1, $2, $3)
+2021-12-14 15:27:52.302 -03 [12291] ERROR:  relation "courses" does not exist at character 15
+2021-12-14 15:27:52.302 -03 [12291] STATEMENT:  SELECT * FROM Courses;

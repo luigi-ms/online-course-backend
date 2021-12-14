@@ -12,7 +12,7 @@ class CourseOperations{
 
     let courseData = await course.selectAllData();
 
-    student.updateCourseArray(true, courseData.title)
+    student.updateCoursesArray(true, courseData.title)
       .then(res => console.log(res))
       .catch(rej => console.error(rej));
   }
@@ -22,8 +22,8 @@ class CourseOperations{
 
     student.id = studentId;
 
-    let studentCourses = student.selectCurrentCourses();
-
+    let studentCourses = await student.selectCurrentCourses();
+    
     studentCourses = studentCourses.filter(course => {
       return course !== courseTitle;
     });
@@ -50,13 +50,13 @@ class CourseOperations{
 
     course.title = title;
     course.description = desc;
-    course.instructorName = data.instructorName;
+    course.instructorName = data.name;
 
     course.insert()
       .then(res => console.log(res))
       .catch(rej => console.error(rej));
 
-    instructor.updateOwnedCourses(true, title).
+    instructor.updateOwnedCourses(true, title)
       .then(res => console.log(res))
       .catch(rej => console.error(rej));
   }
@@ -75,10 +75,13 @@ class CourseOperations{
     const course = new Course();
     const instructor = new Instructor();
 
-    course.id = courseId;
+    course.title = courseTitle;
     instructor.id = instructorId;
 
     let instructorCourses = await instructor.selectOwnedCourses();
+    let courseData = await course.searchByTitle();
+
+    course.id = courseData.idcourse;
 
     instructorCourses = instructorCourses.filter(course => {
       return course !== courseTitle;

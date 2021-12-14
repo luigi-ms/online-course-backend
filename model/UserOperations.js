@@ -7,7 +7,13 @@ class UserOperations{
 
     user.id = studentId;
 
-    return await user.selectAllData();
+    const data =  await user.selectAllData();
+
+    if(data){
+      return Promise.resolve(data);
+    }else{
+      return Promise.reject("404: Student does not exist");
+    }
   }
 
   static updateStudentData(dataType, changeArrayEnd, newValue, studentId){
@@ -17,7 +23,7 @@ class UserOperations{
 
     if(dataType === "currentCourses"){
       user.updateCoursesArray(changeArrayEnd, newValue)
-        .then(res => console.log(res))
+        .then(res => console.log("200"))
         .catch(rej => console.error(rej));
     }else{
       user.updateColumn(dataType, newValue)
@@ -41,7 +47,13 @@ class UserOperations{
 
     user.id = instructorId;
 
-    return await user.selectAllData();
+    const data = await user.selectAllData();
+
+    if(data){
+      return Promise.resolve(data);
+    }else{
+      return Promise.reject("404: Instructor does not exist");
+    }
   }
 
   static updateInstructorData(dataType, changeArrayEnd, newValue, instructorId){
@@ -51,7 +63,7 @@ class UserOperations{
 
     if(dataType === "ownedCourses"){
       user.updateCoursesArray(changeArrayEnd, newValue)
-        .then(res => console.log(res))
+        .then(res => console.log("200"))
         .catch(rej => console.error(rej));
     }else{
       user.updateColumn(dataType, newValue)
