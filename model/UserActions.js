@@ -1,7 +1,7 @@
-const Student = require('./StudentRepository.js');
-const Instructor = require('./InstructorRepository.js');
+const Student = require('./StudentDAO.js');
+const Instructor = require('./InstructorDAO.js');
 
-class UserOperations{
+class UserActions{
   static async getStudentData(studentId){
     const user = new Student();
 
@@ -16,20 +16,14 @@ class UserOperations{
     }
   }
 
-  static updateStudentData(dataType, changeArrayEnd, newValue, studentId){
+  static updateStudentData(dataType, oldValue, newValue, studentId){
     const user = new Student();
 
     user.id = studentId;
 
-    if(dataType === "currentCourses"){
-      user.updateCoursesArray(changeArrayEnd, newValue)
-        .then(res => console.log("200"))
-        .catch(rej => console.error(rej));
-    }else{
-      user.updateColumn(dataType, newValue)
-        .then(res => console.log(res))
-        .catch(rej => console.error(rej));
-    }
+    user.updateColumn(dataType, oldValue, newValue)
+      .then(res => console.log(res))
+      .catch(rej => console.error(rej));
   }
 
   static async eraseStudentData(studentId){
@@ -59,19 +53,14 @@ class UserOperations{
     }
   }
 
-  static updateInstructorData(dataType, changeArrayEnd, newValue, instructorId){
+  static updateInstructorData(dataType, oldValue, newValue, instructorId){
     const user = new Instructor();
 
     user.id = instructorId;
 
-    if(dataType === "ownedCourses"){
-      user.updateCoursesArray(changeArrayEnd, newValue)
-        .then(res => console.log("200"))
-        .catch(rej => console.error(rej));
-    }else{
-      user.updateColumn(dataType, newValue)
-        .then(res => console.log(res))
-        .catch(rej => console.error(rej));
+    user.updateColumn(dataType, oldValue, newValue)
+      .then(res => console.log(res))
+      .catch(rej => console.error(rej));
     }
   }
 
@@ -89,4 +78,4 @@ class UserOperations{
   }
 }
 
-module.exports = UserOperations;
+module.exports = UserActions;

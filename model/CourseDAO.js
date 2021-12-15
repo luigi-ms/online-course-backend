@@ -1,7 +1,7 @@
 const db = require('../connectDatabase.js');
 const Course = require('./Course.js');
 
-class CourseRepository extends Course{
+class CourseDAO extends Course{
   constructor(){
     super();
   }
@@ -79,4 +79,4 @@ class CourseRepository extends Course{
   }
 }
 
-module.exports = CourseRepository;
+module.exports = CourseDAO;

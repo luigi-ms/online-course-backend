@@ -1,7 +1,7 @@
-const Student = require('./StudentRepository.js');
-const Instructor = require('./InstructorRepository.js');
+const Student = require('./StudentDAO.js');
+const Instructor = require('./InstructorDAO.js');
 
-class AuthOperations{
+class AuthActions{
   static async signInStudent(name, bio, password){
     const student = new Student();
 
@@ -63,4 +63,4 @@ class AuthOperations{
   }
 }
 
-module.exports = AuthOperations;
+module.exports = AuthActions;

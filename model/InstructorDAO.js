@@ -1,7 +1,7 @@
 const db = require('../connectDatabase.js');
 const Instructor = require('./Instructor.js');
 
-class InstructorRepository extends Instructor{
+class InstructorDAO extends Instructor{
   constructor(){
     super();
   }
@@ -46,7 +46,7 @@ class InstructorRepository extends Instructor{
     }
   }
 
-  async updateColumn(column, newValue){
+  async updateColumn(column, oldValue, newValue){
     let query = "";
 
     const id = await this.selectIDAndPass();
@@ -56,40 +56,19 @@ class InstructorRepository extends Instructor{
     }
 
     if(column === "name"){
-      query = "UPDATE Instructor SET name=$1 WHERE idInstructor=$2";
+      query = "UPDATE Instructor SET name=$1 WHERE name=$2 AND idInstructor=$3";
     }else if(column === "bio"){
-      query = "UPDATE Instructor SET biography=$1 WHERE idInstructor=$2";
+      query = "UPDATE Instructor SET biography=$1 WHERE bio=$2 AND idInstructor=$3";
     }else if(column === "password"){
-      query = "UPDATE Instructor SET password=$1 WHERE idInstructor=$2";
+      query = "UPDATE Instructor SET password=$1 WHERE password=$2 AND idInstructor=$3";
+    }else if(column === "courses"){
+      query = "UPDATE Instructor SET ownedCourses=array_replace(ownedCourses, $2, $1) WHERE idInstructor=$3";
     }else{
       return "Column does not exist or you are not allowed to modify it";
     }
 
     try{
-      const result = await db.query(query, [newValue, this.id]);
-      return result.rows[0];
-    }catch(err){
-      return err.stack;
-    }
-  }
-
-  async updateCoursesArray(changeOnlyEnd, newValue){
-    let query = "";
-
-    const id = await this.selectIDAndPass();
-
-    if(!id){
-      return "404";
-    }
-
-    if(changeOnlyEnd){
-      query = "UPDATE Instructor SET ownedCourses=array_append(ownedCourses, $1) WHERE idInstructor=$2";
-    }else{
-      query = "UPDATE Instructor SET ownedCourses=$1 WHERE idInstructor=$2";
-    }
-
-    try{
-      const result = await db.query(query, [newValue, this.id]);
+      const result = await db.query(query, [newValue, oldValue, this.id]);
       return result.rows[0];
     }catch(err){
       return err.stack;
@@ -111,6 +90,38 @@ class InstructorRepository extends Instructor{
       return err.stack;
     }
   }
+
+  async insertNewCourse(courseTitle){
+    const id = await this.selectIDAndPass();
+
+    if(!id){
+      return 404;
+    }
+
+    try{
+      const result = await db.query("UPDATE Instructor SET ownedCourses=array_append(ownedCourses, $1) WHERE idInstructor=$2",
+      [courseTitle, this.id]);
+      return result.rows[0];
+    }catch(err){
+      return err.stack;
+    }
+  }
+
+  async deleteOneCourse(courseTitle){
+    const id = await this.selectIDAndPass();
+
+    if(!id){
+      return 404;
+    }
+
+    try{
+      const result = await db.query("UPDATE Instructor SET ownedCourses=array_remove(ownedCourses, $1) WHERE idInstructor=$2",
+      [courseTitle, this.id]);
+      return result.rows[0];
+    }catch(err){
+      return err.stack;
+    }
+  }
 }
 
-module.exports = InstructorRepository;
+module.exports = InstructorDAO;

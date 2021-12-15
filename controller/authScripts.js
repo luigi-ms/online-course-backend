@@ -1,4 +1,4 @@
-const Auth = require('../model/AuthOperations.js');
+const Auth = require('../model/AuthActions.js');
 const express = require('express');
 
 const router = express.Router();

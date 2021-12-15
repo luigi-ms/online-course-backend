@@ -1,4 +1,4 @@
-const User = require('../model/UserOperations.js');
+const User = require('../model/UserActions.js');
 const express = require('express');
 
 const router = express.Router();
@@ -22,13 +22,17 @@ router.get('/instructor', (req, res) => {
 router.patch('/update-data/student', (req, res) => {
   const data = req.body;
 
-  User.updateStudentData();
+  User.updateStudentData(data.dataType, data.oldValue, data.newValue, data.id)
+    .then(resolved => res.json({ resolved }))
+    .catch(rejected => res.json({ rejected }));
 });
 
 router.patch('/update-data/instructor', (req, res) => {
   const data = req.body;
 
-  User.updateInstructorData();
+  User.updateInstructorData(data.dataType, data.oldValue, data.newValue, data.id)
+    .then(resolved => res.json({ resolved }))
+    .catch(rejected => res.json({ rejected }));
 });
 
 router.delete('/erase-data/student', (req, res) => {
