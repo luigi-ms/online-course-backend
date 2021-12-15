@@ -12,7 +12,7 @@ class UserOperations{
     if(data){
       return Promise.resolve(data);
     }else{
-      return Promise.reject("404: Student does not exist");
+      return Promise.reject(404);
     }
   }
 
@@ -32,14 +32,17 @@ class UserOperations{
     }
   }
 
-  static eraseStudentData(studentId){
+  static async eraseStudentData(studentId){
     const user = new Student();
 
     user.id = studentId;
 
-    user.deleteStudent()
-      .then(res => console.log(res))
-      .catch(rej => console.error(rej));
+    try{
+      const deletion = await user.deleteStudent();
+      return Promise.resolve(deletion);
+    }catch(err){
+      return Promise.reject(err);
+    }
   }
 
   static async getInstructorData(instructorId){
@@ -52,7 +55,7 @@ class UserOperations{
     if(data){
       return Promise.resolve(data);
     }else{
-      return Promise.reject("404: Instructor does not exist");
+      return Promise.reject(404);
     }
   }
 
@@ -72,14 +75,17 @@ class UserOperations{
     }
   }
 
-  static eraseInstructorData(instructorId){
+  static async eraseInstructorData(instructorId){
     const user = new Instructor();
 
     user.id = instructorId;
 
-    user.deleteInstructor()
-      .then(res => console.log(res))
-      .catch(rej => console.error(rej));
+    try{
+      const deletion = await user.deleteInstructor();
+      return Promise.resolve(deletion);
+    }catch(err){
+      return Promise.reject(err);
+    }
   }
 }
 

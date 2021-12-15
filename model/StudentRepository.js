@@ -10,7 +10,7 @@ class StudentRepository extends Student{
     try{
       const result = await db.query("INSERT INTO Student(name, biography, password) VALUES($1, $2, $3)",
       [this.name, this.bio, this.password]);
-      return "Insertion done: "+result.rows[0];
+      return "Insertion done: "+result.rows;
     }catch(err){
       return err.stack;
     }
@@ -19,8 +19,6 @@ class StudentRepository extends Student{
   async selectAllData(){
     try{
       const result = await db.query("SELECT * FROM Student WHERE idStudent=$1", [this.id]);
-
-      this.name = result.rows[0].name;
 
       return result.rows[0];
     }catch(err){

@@ -2,28 +2,34 @@ const Student = require('./StudentRepository.js');
 const Instructor = require('./InstructorRepository.js');
 
 class AuthOperations{
-  static signInStudent(name, bio, password){
+  static async signInStudent(name, bio, password){
     const student = new Student();
 
     student.name = name;
     student.bio = bio;
     student.password = password;
 
-    student.insert()
-      .then(res => console.log(res))
-      .catch(err => console.err(err));
+    try{
+      const insertion = await student.insert();
+      return Promise.resolve(200);
+    }catch(err){
+      return Promise.reject(err);
+    }
   }
 
-  static signInInstructor(name, bio, password){
+  static async signInInstructor(name, bio, password){
     const instructor = new Instructor();
 
     instructor.name = name;
     instructor.bio = bio;
     instructor.password = password;
 
-    instructor.insert()
-      .then(res => console.log(res))
-      .catch(err => console.err(err));
+    try{
+      const insertion = await instructor.insert();
+      return Promise.resolve(200);
+    }catch(err){
+      return Promise.reject(err);
+    }
   }
 
   static async loginStudent(id, password){

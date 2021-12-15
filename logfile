@@ -86,3 +86,17 @@
 2021-12-14 14:55:00.895 -03 [17619] STATEMENT:  INSERT INTO Course(title, description, instructorName) VALUES($1, $2, $3)
 2021-12-14 15:27:52.302 -03 [12291] ERROR:  relation "courses" does not exist at character 15
 2021-12-14 15:27:52.302 -03 [12291] STATEMENT:  SELECT * FROM Courses;
+2021-12-14 20:59:05.874 -03 [11422] LOG:  starting PostgreSQL 14.1 on arm-unknown-linux-androideabi, compiled by Android (7714059, based on r416183c1) clang version 12.0.8 (https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee), 32-bit
+2021-12-14 20:59:05.877 -03 [11422] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2021-12-14 20:59:05.882 -03 [11422] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2021-12-14 20:59:05.910 -03 [11428] LOG:  database system was interrupted; last known up at 2021-12-14 15:51:19 -03
+2021-12-14 20:59:06.169 -03 [11428] LOG:  database system was not properly shut down; automatic recovery in progress
+2021-12-14 20:59:06.186 -03 [11428] LOG:  redo starts at 0/182FAA8
+2021-12-14 20:59:06.186 -03 [11428] LOG:  invalid record length at 0/182FB90: wanted 24, got 0
+2021-12-14 20:59:06.186 -03 [11428] LOG:  redo done at 0/182FB58 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2021-12-14 20:59:06.230 -03 [11422] LOG:  database system is ready to accept connections
+2021-12-14 22:51:18.512 -03 [11422] LOG:  received fast shutdown request
+2021-12-14 22:51:18.520 -03 [11422] LOG:  aborting any active transactions
+2021-12-14 22:51:18.524 -03 [11422] LOG:  background worker "logical replication launcher" (PID 11435) exited with exit code 1
+2021-12-14 22:51:18.525 -03 [11430] LOG:  shutting down
+2021-12-14 22:51:18.578 -03 [11422] LOG:  database system is shut down
