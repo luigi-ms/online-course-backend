@@ -8,9 +8,9 @@ class InstructorDAO extends Instructor{
 
   async insert(){
     try{
-      const result = await db.query("INSERT INTO Instructor(name, biography, password) VALUES($1, $2, $3)",
+      const insertionResult = await db.query("INSERT INTO Instructor(name, biography, password) VALUES($1, $2, $3)",
       [this.name, this.bio, this.password]);
-      return result.rows[0];
+      return insertionResult.rows;
     }catch(err){
       return err.stack;
     }
@@ -18,9 +18,9 @@ class InstructorDAO extends Instructor{
 
   async selectAllData(){
     try{
-      const result = await db.query("SELECT * FROM Instructor WHERE idInstructor=$1",
+      const data = await db.query("SELECT * FROM Instructor WHERE idInstructor=$1",
       [this.id]);
-      return result.rows[0];
+      return data.rows[0];
     }catch(err){
       return err.stack;
     }
@@ -28,9 +28,9 @@ class InstructorDAO extends Instructor{
 
   async selectIDAndPass(){
     try{
-      const result = await db.query("SELECT idInstructor, password FROM Instructor WHERE idInstructor=$1",
+      const idAndPass = await db.query("SELECT idInstructor, password FROM Instructor WHERE idInstructor=$1",
       [this.id]);
-      return result.rows[0];
+      return idAndPass.rows[0];
     }catch(err){
       return err.stack;
     }
@@ -38,9 +38,9 @@ class InstructorDAO extends Instructor{
 
   async selectOwnedCourses(){
     try{
-      const result = await db.query("SELECT ownedCourses FROM Instructor WHERE idInstructor=$1",
+      const courses = await db.query("SELECT ownedCourses FROM Instructor WHERE idInstructor=$1",
       [this.id]);
-      return result.rows[0].ownedcourses;
+      return courses.rows[0].ownedcourses;
     }catch(err){
       return err.stack;
     }
@@ -49,16 +49,14 @@ class InstructorDAO extends Instructor{
   async updateColumn(column, oldValue, newValue){
     let query = "";
 
-    const id = await this.selectIDAndPass();
-
-    if(!id){
-      return "404";
+    if(!(await this.instructorExists())){
+      return 404;
     }
 
     if(column === "name"){
       query = "UPDATE Instructor SET name=$1 WHERE name=$2 AND idInstructor=$3";
     }else if(column === "bio"){
-      query = "UPDATE Instructor SET biography=$1 WHERE bio=$2 AND idInstructor=$3";
+      query = "UPDATE Instructor SET biography=$1 WHERE biography=$2 AND idInstructor=$3";
     }else if(column === "password"){
       query = "UPDATE Instructor SET password=$1 WHERE password=$2 AND idInstructor=$3";
     }else if(column === "courses"){
@@ -68,59 +66,59 @@ class InstructorDAO extends Instructor{
     }
 
     try{
-      const result = await db.query(query, [newValue, oldValue, this.id]);
-      return result.rows[0];
+      const updatingResult = await db.query(query, [newValue, oldValue, this.id]);
+      return updatingResult.rows[0];
     }catch(err){
       return err.stack;
     }
   }
 
   async deleteInstructor(){
-    const id = await this.selectIDAndPass();
-
-    if(!id){
-      return "404";
+    if(!(await this.instructorExists())){
+      return 404;
     }
 
     try{
-      const result = await db.query("DELETE FROM Instructor WHERE idInstructor=$1",
+      const deletionResult = await db.query("DELETE FROM Instructor WHERE idInstructor=$1",
       [this.id]);
-      return result.rows[0];
+      return deletionResult.rows[0];
     }catch(err){
       return err.stack;
     }
   }
 
   async insertNewCourse(courseTitle){
-    const id = await this.selectIDAndPass();
-
-    if(!id){
+    if(!(await this.instructorExists())){
       return 404;
     }
 
     try{
-      const result = await db.query("UPDATE Instructor SET ownedCourses=array_append(ownedCourses, $1) WHERE idInstructor=$2",
+      const insertionResult = await db.query("UPDATE Instructor SET ownedCourses=array_append(ownedCourses, $1) WHERE idInstructor=$2",
       [courseTitle, this.id]);
-      return result.rows[0];
+      return insertionResult.rows[0];
     }catch(err){
       return err.stack;
     }
   }
 
   async deleteOneCourse(courseTitle){
-    const id = await this.selectIDAndPass();
-
-    if(!id){
+    if(!(await this.instructorExists())){
       return 404;
     }
 
     try{
-      const result = await db.query("UPDATE Instructor SET ownedCourses=array_remove(ownedCourses, $1) WHERE idInstructor=$2",
+      const deletionResult = await db.query("UPDATE Instructor SET ownedCourses=array_remove(ownedCourses, $1) WHERE idInstructor=$2",
       [courseTitle, this.id]);
-      return result.rows[0];
+      return deletionResult.rows[0];
     }catch(err){
       return err.stack;
     }
+  }
+
+  async instructorExists(){
+   const founded = await this.selectIDAndPass();
+
+    return (founded) ? true : false;
   }
 }
 

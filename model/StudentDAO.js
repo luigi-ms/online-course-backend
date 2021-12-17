@@ -8,9 +8,9 @@ class StudentDAO extends Student{
 
   async insert(){
     try{
-      const result = await db.query("INSERT INTO Student(name, biography, password) VALUES($1, $2, $3)",
+      const insertionResult = await db.query("INSERT INTO Student(name, biography, password) VALUES($1, $2, $3)",
       [this.name, this.bio, this.password]);
-      return "Insertion done: "+result.rows;
+      return insertionResult.rows;
     }catch(err){
       return err.stack;
     }
@@ -18,9 +18,9 @@ class StudentDAO extends Student{
 
   async selectAllData(){
     try{
-      const result = await db.query("SELECT * FROM Student WHERE idStudent=$1", [this.id]);
-
-      return result.rows[0];
+      const data = await db.query("SELECT * FROM Student WHERE idStudent=$1",
+      [this.id]);
+      return data.rows[0];
     }catch(err){
       return err.stack;
     }
@@ -28,8 +28,9 @@ class StudentDAO extends Student{
 
   async selectIDAndPass(){
     try{
-      const result = await db.query("SELECT idStudent, password FROM Student WHERE idStudent=$1", [this.id]);
-      return result.rows[0];
+      const idAndPassword = await db.query("SELECT idStudent, password FROM Student WHERE idStudent=$1",
+      [this.id]);
+      return idAndPassword.rows[0];
     }catch(err){
       return err.stack;
     }
@@ -37,9 +38,9 @@ class StudentDAO extends Student{
 
   async selectCurrentCourses(){
     try{
-      const result = await db.query("SELECT currentCourses FROM Student WHERE idStudent=$1",
+      const courses = await db.query("SELECT currentCourses FROM Student WHERE idStudent=$1",
       [this.id]);
-      return result.rows[0].currentcourses;
+      return courses.rows[0].currentcourses;
     }catch(err){
       return err.stack;
     }
@@ -48,16 +49,14 @@ class StudentDAO extends Student{
   async updateColumn(column, oldValue, newValue){
     let query = "";
 
-    const id = await this.selectIDAndPass();
-
-    if(!id){
-      return 404;
+    if(!(await this.studentExists())){
+      return new Error("This id does not belong to any user");
     }
 
     if(column === "name"){
-      query = "UPDATE Student SET name=$1 WHERE name=$2 AND idStudent=$2";
+      query = "UPDATE Student SET name=$1 WHERE name=$2 AND idStudent=$3";
     }else if(column === "bio"){
-      query = "UPDATE Student SET biography=$1 WHERE bio=$2 AND idStudent=$2";
+      query = "UPDATE Student SET biography=$1 WHERE biography=$2 AND idStudent=$3";
     }else if(column === "password"){
       query = "UPDATE Student SET password=$1 WHERE password=$2 AND idStudent=$3";
     }else if(column === "courses"){
@@ -67,59 +66,72 @@ class StudentDAO extends Student{
     }
 
     try{
-      const result = await db.query(query, [newValue, oldValue, this.id]);
-      return "Updated: "+result.rows[0];
+      const updatingResult = await db.query(query, [newValue, oldValue, this.id]);
+      return updatingResult.rows[0];
     }catch(err){
       return err.stack;
     }
   }
 
   async deleteStudent(){
-    const id = await this.selectIDAndPass();
-
-    if(!id){
-      return "404";
+    if(!(await this.studentExists())){
+      return 404;
     }
 
     try{
-      const result = await db.query("DELETE FROM Student WHERE idStudent=$1", [this.id]);
-      return result.rows[0];
+      const deletionResult = await db.query("DELETE FROM Student WHERE idStudent=$1",
+      [this.id]);
+      return deletionResult.rows[0];
     }catch(err){
       return err.stack;
     }
   }
 
   async insertNewCourse(newCourse){
-    const id = await this.selectIDAndPass();
-
-    if(!id){
-      return 404;
+    if(!(await this.studentExists())){
+      return new Error("This id does not belong to any user");
     }
 
     try{
-      const result = await db.query("UPDATE Student SET currentCourses=array_append(currentCourses, $1) WHERE idStudent=$2",
+      const insertionResult = await db.query("UPDATE Student SET currentCourses=array_append(currentCourses, $1) WHERE idStudent=$2",
       [newCourse, this.id]);
 
-      return result.rows[0];
+      return insertionResult.rows[0];
     }catch(err){
       return err.stack;
     }
   }
 
   async deleteOneCourse(courseTitle){
-    const id = await this.selectIDAndPass();
-
-    if(!id){
-      return 404;
+    if(!(await this.studentExists())){
+      return new Error("This id does not belong to any user");
     }
 
     try{
-      const result = await db.query("UPDATE Student SET currentCourses=array_remove(currentCourses, $1) WHERE idStudent=$2",
+      const deletionResult = await db.query("UPDATE Student SET currentCourses=array_remove(currentCourses, $1) WHERE idStudent=$2",
       [courseTitle, this.id]);
-      return result.rows[0];
+      return deletionResult.rows[0];
     }catch(err){
       return err.stack;
     }
+  }
+
+  async deleteCourseFromStudentsList(courseTitle){
+    try{
+      const bigUpdate = await db.query("UPDATE Student SET currentCourses=array_remove(currentCourses, $1) WHERE $1=ANY(currentCourses)",
+      [courseTitle]);
+
+      console.log(bigUpdate);
+      return bigUpdate.rows;
+    }catch(err){
+      return err.stack;
+    }
+  }
+
+  async studentExists(){
+    const founded = await this.selectIDAndPass();
+
+    return (founded) ? true : false;
   }
 }
 

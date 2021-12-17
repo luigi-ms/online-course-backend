@@ -9,21 +9,22 @@ class UserActions{
 
     const data =  await user.selectAllData();
 
-    if(data){
-      return Promise.resolve(data);
-    }else{
-      return Promise.reject(404);
-    }
+    return (data) 
+      ? Promise.resolve(data) 
+      : Promise.reject("This id does not belong to any user");
   }
 
-  static updateStudentData(dataType, oldValue, newValue, studentId){
+  static async updateStudentData(dataType, oldValue, newValue, studentId){
     const user = new Student();
 
     user.id = studentId;
 
-    user.updateColumn(dataType, oldValue, newValue)
-      .then(res => console.log(res))
-      .catch(rej => console.error(rej));
+    try{
+      const updated = await user.updateColumn(dataType, oldValue, newValue);
+      return Promise.resolve(updated);
+    }catch(err){
+      return Promise.reject(err);
+    }
   }
 
   static async eraseStudentData(studentId){
@@ -46,21 +47,21 @@ class UserActions{
 
     const data = await user.selectAllData();
 
-    if(data){
-      return Promise.resolve(data);
-    }else{
-      return Promise.reject(404);
-    }
+    return (data) 
+      ? Promise.resolve(data) 
+      : Promise.reject("This id does not belong to any user");
   }
 
-  static updateInstructorData(dataType, oldValue, newValue, instructorId){
+  static async updateInstructorData(dataType, oldValue, newValue, instructorId){
     const user = new Instructor();
 
     user.id = instructorId;
 
-    user.updateColumn(dataType, oldValue, newValue)
-      .then(res => console.log(res))
-      .catch(rej => console.error(rej));
+    try{
+      const updated = await user.updateColumn(dataType, oldValue, newValue);
+      return Promise.resolve(updated);
+    }catch(err){
+      return Promise.reject(err);
     }
   }
 

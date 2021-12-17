@@ -11,7 +11,7 @@ class AuthActions{
 
     try{
       const insertion = await student.insert();
-      return Promise.resolve(200);
+      return Promise.resolve(insertion);
     }catch(err){
       return Promise.reject(err);
     }
@@ -26,7 +26,7 @@ class AuthActions{
 
     try{
       const insertion = await instructor.insert();
-      return Promise.resolve(200);
+      return Promise.resolve(insertion);
     }catch(err){
       return Promise.reject(err);
     }

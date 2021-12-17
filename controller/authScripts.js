@@ -4,33 +4,33 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/signIn/student', (req, res) => {
-  const data = req.body;
+  const { name, bio, password } = req.body;
   
-  Auth.signInStudent(data.name, data.bio, data.password)
+  Auth.signInStudent(name, bio, password)
     .then(resolved => res.json({ resolved }))
     .catch(rejected => res.json({ rejected }));
-
 });
 
 router.post('/signIn/instructor', (req, res) => {
-  const data = req.body;
+  const { name, bio, password } = req.body;
 
-  Auth.signInInstructor(data.name, data.bio, data.password)
+  Auth.signInInstructor(name, bio, password)
     .then(resolved => res.json({ resolved }))
     .catch(rejected => res.json({ rejected }));
-
 });
 
 router.post('/login/student', (req, res) => {
-  const credentials = req.body;
-  Auth.loginStudent(credentials.id, credentials.password)
+  const { studentID, password } = req.body;
+
+  Auth.loginStudent(studentID, password)
     .then(resolved => res.json({ resolved }))
     .catch(rejected => res.json({ rejected }));
 });
 
 router.post('/login/instructor', (req, res) => {
-  const credentials = req.body;
-  Auth.loginInstructor(credentials.id, credentials.password)
+  const { instructorID, password } = req.body;
+ 
+  Auth.loginInstructor(instructorID, password)
     .then(resolved => res.json({ resolved }))
     .catch(rejected => res.json({ rejected }));
 });

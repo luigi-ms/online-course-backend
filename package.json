@@ -1,5 +1,6 @@
 {
   "name": "online-course-system",
+  "description": "Back-End do projeto",
   "version": "1.0.0",
   "main": "./controller/server.js",
   "license": "MIT",
@@ -7,5 +8,9 @@
   "dependencies": {
     "express": "^4.17.1",
     "pg": "^8.7.1"
+  },
+  "scripts":{
+    "startDatabase": "pg_ctl -D $PREFIX/var/lib/psql/ -l logfile start",
+    "start": "node startDatabase && node controller/server.js"
   }
 }

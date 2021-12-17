@@ -10,11 +10,18 @@ class CourseActions{
     course.id = courseId;
     student.id = studentId;
 
-    let courseData = await course.selectAllData();
+    const courseData = await course.selectAllData();
+
+    if(!courseData){
+      return Promise.reject("This id does not belong to any course");
+    }
 
     try{
-      const result = await student.insertNewCourse(courseData.title);
-      return Promise.resolve(result);
+      const enrollment = await student.insertNewCourse(courseData.title);
+
+      return (enrollment instanceof Error)
+        ? Promise.reject(enrollment.message)
+        : Promise.resolve(enrollment);
     }catch(err){
       return Promise.reject(err);
     }
@@ -26,8 +33,10 @@ class CourseActions{
     student.id = studentId;
 
     try{
-      const result = await student.deleteOneCourse(courseTitle);
-      return Promise.resolve(result);
+      const unenrollment = await student.deleteOneCourse(courseTitle);
+      return (unenrollment instanceof Error)
+        ? Promise.reject(unenrollment.message)
+        : Promise.resolve(unenrollment);
     }catch(err){
       return Promise.reject(err);
     }
@@ -39,8 +48,11 @@ class CourseActions{
     course.title = courseTitle;
 
     try{
-      const result = await course.searchByTitle();
-      return Promise.resolve(result);
+      const searchResult = await course.searchByTitle();
+
+      return (searchResult instanceof Error)
+        ? Promise.reject(searchResult.message)
+        : Promise.resolve(searchResult);
     }catch(err){
       return Promise.reject(err);
     }
@@ -58,9 +70,9 @@ class CourseActions{
     course.instructorName = data.name;
   
     try{
-      const instructorResult = await instructor.insertNewCourse(course.title);
-      const courseResult = await course.insert();
-      return Promise.resolve({ instructorResult, courseResult });
+      const courseInsertion = await instructor.insertNewCourse(course.title);
+      const courseCreation = await course.insert();
+      return Promise.resolve({ courseInsertion, courseCreation });
     }catch(err){
       return Promise.rejected(err);
     }
@@ -73,7 +85,10 @@ class CourseActions{
 
     try{
       const courseData = await course.selectAllData();
-      return Promise.resolve(courseData);
+
+      return (courseData) 
+        ? Promise.resolve(courseData)
+        : Promise.reject("This id does not belong to any course");
     }catch(err){
       return Promise.reject(err);
     }
@@ -85,8 +100,8 @@ class CourseActions{
     course.id = courseId;
 
     try{
-      const result = await course.updateColumn(dataType, newValue);
-      return Promise.resolve(result);
+      const updating = await course.updateColumn(dataType, newValue);
+      return Promise.resolve(updating);
     }catch(err){
       return Promise.reject(err);
     }
@@ -95,19 +110,21 @@ class CourseActions{
   static async deleteCourse(courseTitle, instructorId){
     const course = new Course();
     const instructor = new Instructor();
+    const student = new Student();
 
     course.title = courseTitle;
     instructor.id = instructorId;
 
-    let instructorCourses = await instructor.selectOwnedCourses();
-    let courseData = await course.searchByTitle();
+    const instructorCourses = await instructor.selectOwnedCourses();
+    const courseData = await course.searchByTitle();
 
     course.id = courseData.idcourse;
 
     try{
-      const instructorResult = await instructor.deleteOneCourse(courseTitle);
-      const courseResult = await course.deleteCourse();
-      return Promise.resolve({ instructorResult, courseResult });
+      const listsUpdating = await student.deleteCourseFromStudentsList(courseTitle);
+      const courseRemoving = await instructor.deleteOneCourse(courseTitle);
+      const courseDeletion = await course.deleteCourse();
+      return Promise.resolve({ listUpdating, courseRemoving, courseDeletion });
     }catch(err){
       return Promise.reject(err);
     }

@@ -8,9 +8,9 @@ class CourseDAO extends Course{
 
   async insert(){
     try{
-      const result = await db.query("INSERT INTO Course(title, description, instructorName) VALUES($1, $2, $3)",
+      const insertionResult = await db.query("INSERT INTO Course(title, description, instructorName) VALUES($1, $2, $3)",
       [this.title, this.description, this.instructorName]);
-      return result.rows[0];
+      return insertionResult.rows[0];
     }catch(err){
       return err.stack;
     }
@@ -18,9 +18,10 @@ class CourseDAO extends Course{
 
   async selectAllData(){
     try{
-      const result = await db.query("SELECT * FROM Course WHERE idCourse=$1",
+      const data = await db.query("SELECT * FROM Course WHERE idCourse=$1",
       [this.id]);
-      return result.rows[0];
+
+      return data.rows[0];
     }catch(err){
       return err.stack;
     }
@@ -29,39 +30,37 @@ class CourseDAO extends Course{
   async updateColumn(column, newValue){
     let query = "";
 
-    const data = await this.selectAllData();
-
-    if(!data){
-      return "404";
+    if(!(await this.courseExists())){
+      return new Error("Course "+this.id+" does not exists");
     }
 
     if(column === "title"){
       query = "UPDATE Course SET title=$1 WHERE idCourse=$2";
     }else if(column === "description"){
       query = "UPDATE Course SET description=$1 WHERE idCourse=$2";
+    }else if(column === "instructorName"){
+      query = "UPDATE Course SET instructorName=$1 WHERE idCourse=$2";
     }else{
       return "Column does not exist or you are not alowed to modify it";
     }
 
     try{
-      const result = await db.query(query, [newValue, this.id]);
-      return result.rows[0];
+      const updatingResult = await db.query(query, [newValue, this.id]);
+      return updatingResult.rows[0];
     }catch(err){
       return err.stack;
     }
   }
 
   async deleteCourse(){
-    const data = this.selectAllData();
-
-    if(!data){
-      return "404";
+    if(!(await this.courseExists())){
+      return 404;
     }
 
     try{
-      const result = await db.query("DELETE FROM Course WHERE idCourse=$1",
+      const deletionResult = await db.query("DELETE FROM Course WHERE idCourse=$1",
       [this.id]);
-      return result.rows[0];
+      return deletionResult.rows[0];
     }catch(err){
       return err.stack;
     }
@@ -69,13 +68,21 @@ class CourseDAO extends Course{
 
   async searchByTitle(){
     try{
-      const result = await db.query("SELECT * FROM Course WHERE title=$1",
-        [this.title]);
+      const searchResult = await db.query("SELECT * FROM Course WHERE title=$1",
+      [this.title]);
 
-      return result.rows[0];
+      return (searchResult.rowCount === 0)
+        ? new Error(this.title+" not found")
+        : searchResult.rows[0];
     }catch(err){
       return err.stack;
     }
+  }
+
+  async courseExists(){
+    const founded = await this.selectAllData();
+
+    return (founded) ? true : false;
   }
 }
 

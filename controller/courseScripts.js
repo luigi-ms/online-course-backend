@@ -3,58 +3,58 @@ const express = require('express');
 
 const router = express.Router();
 
-router.get('/search-course', (req, res) => {
-  const title = req.query.title;
+router.get('/search-course/:title', (req, res) => {
+  const title = req.params.title;
 
   Course.searchCourse(title)
     .then(resolved => res.json({ resolved }))
-    .catch(rejected => res.json({ rejected }));
+    .catch(rejected => res.status(404).json({ rejected }));
 });
 
-router.get('/course', (req, res) => {
-  const credential = req.query.courseID;
+router.get('/course/:courseId', (req, res) => {
+  const credential = req.params.courseId;
 
   Course.getCourseData(credential)
-    .then(resolved => res.json({ resolved }))
-    .catch(rejected => res.json({ rejected }));
+    .then(resolved => res.json(resolved))
+    .catch(rejected => res.status(404).json({ rejected }));
 });
 
 router.post('/student/enroll', (req, res) => {
-  const credentials = req.body;
+  const { studentID, courseID } = req.body;
 
-  Course.enrollStudent(crendentials.studentID, credentials.courseID)
+  Course.enrollStudent(studentID, courseID)
     .then(resolved => res.json({ resolved }))
-    .catch(rejected => res.json({ rejected }));
+    .catch(rejected => res.status(404).json({ rejected }));
 });
 
 router.post('/student/unenroll', (req, res) => {
-  const data = req.body;
+  const { studentID, courseTitle } = req.body;
 
-  Course.unenrollStudent(data.studentID, data.courseTitle)
+  Course.unenrollStudent(studentID, courseTitle)
     .then(resolved => res.json({ resolved }))
-    .catch(rejected => res.json({ rejected }));
+    .catch(rejected => res.status(404).json({ rejected }));
 });
 
 router.post('/new-course', (req, res) => {
-  const data = req.body;
+  const { title, desc, instructorID } = req.body;
 
-  Course.create(data.title, data.desc, data.instructorId)
+  Course.create(title, desc, instructorID)
     .then(resolved => res.json(resolved))
     .catch(rejected => res.json({ rejected }));
 });
 
 router.patch('/update-data/course', (req, res) => {
-  const data = req.body;
+  const { dataType, newValue, courseID } = req.body;
 
-  Course.updateCourseData(data.dataType, data.newValue)
+  Course.updateCourseData(dataType, newValue, courseID)
     .then(resolved => res.json({ resolved }))
     .catch(rejected => res.json({ rejected }));
 });
 
-router.delete('/erase-data/course', (req, res) => {
-  const data = req.body;
+router.delete('/erase/course', (req, res) => {
+  const { title, instructorID } = req.body;
 
-  Course.deleteCourse(data.title, data.instructorId)
+  Course.deleteCourse(title, instructorID)
     .then(resolved => res.json(resolved))
     .catch(rejected => res.json({ rejected }));
 });

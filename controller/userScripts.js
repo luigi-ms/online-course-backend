@@ -3,50 +3,50 @@ const express = require('express');
 
 const router = express.Router();
 
-router.get('/student', (req, res) => {
-  const credential = req.query;
+router.get('/student/:studentId', (req, res) => {
+  const credential = req.params.studentId;
 
-  User.getStudentData(credential.id)
-    .then(resolved => res.json({ resolved }))
-    .catch(rejected => res.json({ rejected }));
+  User.getStudentData(credential)
+    .then(resolved => res.json(resolved))
+    .catch(rejected => res.status(404).json({ rejected }));
 });
 
-router.get('/instructor', (req, res) => {
-  const credential = req.query;
+router.get('/instructor/:instructorId', (req, res) => {
+  const credential = req.params.instructorId;
 
-  User.getInstructorData(credential.id)
-    .then(resolved => res.json({ resolved }))
-    .catch(rejected => res.json({ rejected }));
+  User.getInstructorData(credential)
+    .then(resolved => res.json(resolved))
+    .catch(rejected => res.status(404).json({ rejected }));
 });
 
 router.patch('/update-data/student', (req, res) => {
-  const data = req.body;
+  const { dataType, oldValue, newValue, studentID } = req.body;
 
-  User.updateStudentData(data.dataType, data.oldValue, data.newValue, data.id)
+  User.updateStudentData(dataType, oldValue, newValue, studentID)
     .then(resolved => res.json({ resolved }))
     .catch(rejected => res.json({ rejected }));
 });
 
 router.patch('/update-data/instructor', (req, res) => {
-  const data = req.body;
+  const { dataType, oldValue, newValue, instructorID } = req.body;
 
-  User.updateInstructorData(data.dataType, data.oldValue, data.newValue, data.id)
+  User.updateInstructorData(dataType, oldValue, newValue, instructorID)
     .then(resolved => res.json({ resolved }))
     .catch(rejected => res.json({ rejected }));
 });
 
-router.delete('/erase-data/student', (req, res) => {
-  const credential = req.body;
+router.delete('/erase/student', (req, res) => {
+  const { studentID } = req.body;
 
-  User.eraseStudentData(credential.id)
+  User.eraseStudentData(studentID)
     .then(resolved => res.json({ resolved }))
     .catch(rejected => res.json({ rejected }));
 });
 
-router.delete('/erase-data/instructor', (req, res) => {
-  const credential = req.body;
+router.delete('/erase/instructor', (req, res) => {
+  const { instructorID } = req.body;
 
-  User.eraseInstructorData(credential.id)
+  User.eraseInstructorData(instructorID)
     .then(resolved => res.json({ resolved }))
     .catch(rejected => res.json({ rejected }));
 });
