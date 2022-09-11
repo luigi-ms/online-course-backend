@@ -3,8 +3,8 @@
   "description": "Back-End do projeto",
   "version": "1.0.0",
   "main": "./controller/server.js",
-  "license": "MIT",
-  "author": "Luigi Moraes",
+  "license": "GNU AGPLv3",
+  "author": "Luigi Moraes<luigimoraessantos@gmail.com>",
   "dependencies": {
     "express": "^4.18.1",
     "pg": "^8.8.0"
@@ -12,5 +12,9 @@
   "scripts":{
     "startDatabase": "pg_ctl -D $PREFIX/var/lib/psql/ -l logfile start",
     "start": "node startDatabase && node controller/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luigi-ms-git/online-course-backend"
   }
 }
