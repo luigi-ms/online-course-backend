@@ -6,7 +6,7 @@
   "license": "GNU AGPLv3",
   "author": "Luigi Moraes<luigimoraessantos@gmail.com>",
   "dependencies": {
-    "express": "^4.18.1",
+    "express": "^4.18.2",
     "pg": "^8.8.0"
   },
   "scripts":{
